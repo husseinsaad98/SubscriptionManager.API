@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  subscriptionmanager.api:
+    image: ${DOCKER_REGISTRY-}subscriptionmanagerapi
+    container_name: subscriptionmanager.api
+    build:
+      context: .
+      dockerfile: SubscriptionManager.API/Dockerfile
+    ports:
+     - "5000:5000"
+     - "5001:5001" 
+    depends_on:
+     - subscriptionmanager.database
+  subscriptionmanager.database:
+     image: postgres:latest
+     container_name: subscriptionmanager.database
+     environment:
+        - POSTGRES_DB=SubscriptionManager
+        - POSTGRES_User=postgres
+        - POSTGRES_PASSWORD=postgres
+     volumes:
+        - ./.containers/subscriptionmanager-db:/var/lib/postgresql/data
+     ports:
+        - 5432:5432
+  
